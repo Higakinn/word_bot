@@ -1,0 +1,33 @@
+name: deploy word GAS
+
+on: push
+  
+
+env:
+  CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+  CLASP_JSON: ${{ secrets.CLASP_JSON }}
+  # BOT_ENV: ${{ secrets.BOT_ENV }}
+  LINE_ACCESS_TOKEN: ${{ secrets.LINE_ACCESS_TOKEN }}
+  USER_ID: ${{ secrets.USER_ID }}
+  # SHEET_ID: ${{ secrets.SHEET_ID }}
+  # LIFF_URL: ${{ secrets.LIFF_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git checkout current branch #作業ブランチにchekout
+      uses: actions/checkout@v2 #サードパーティの公開アクションを利用
+      with:
+        ref: ${{ github.ref }}
+    - name: deploy word bot google app script with clasp  
+      run:  echo "deploy google app script with clasp" &&
+            mv word/word/test.js word/word/backup &&
+            sed -e "s|__ACCESS_TOKEN__|${LINE_ACCESS_TOKEN}|g"
+                -e "s|__USER_ID__|${USER_ID}|g"
+                -e "s|__SHEET_ID__|${SHEET_ID}|g"
+                -e "s|__LIFF_URL__|${LIFF_URL}|g" word/word/backup  > word/word/test.js &&
+            echo -n "${CLASPRC_JSON}" | base64 -d > word/.clasprc.json &&
+            echo -n "${CLASP_JSON}" | base64 -d > word/word/.clasp.json &&
+            docker-compose up -d &&
+            docker-compose exec -T word clasp push

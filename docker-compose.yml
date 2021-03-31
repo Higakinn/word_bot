@@ -1,0 +1,7 @@
+version: '2'
+services:
+  word:
+    build: .
+    tty: true
+    volumes:
+      - ./word/:/root/
