@@ -11,7 +11,7 @@ env:
   DUBUG_SHEET_ID: ${{ secrets.DUBUG_SHEET_ID }}
   USER_ID: ${{ secrets.USER_ID }}
   # SHEET_ID: ${{ secrets.SHEET_ID }}
-  # LIFF_URL: ${{ secrets.LIFF_URL }}
+  LIFF_URL: ${{ secrets.LIFF_URL }}
 
 jobs:
   build:

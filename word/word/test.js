@@ -89,7 +89,8 @@ function handleMessage(e) {
     }
     var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
     var cache = CacheService.getScriptCache();
-    reply(replyToken, "hoge");
+    // reply(replyToken, "hoge");
+    replyButtonTemplate(replyToken)
 }
 // function setTrigger(year, mounth, day, time,content) {
 //   var onChangeTrigger = ScriptApp.newTrigger("createMessage")
@@ -212,13 +213,13 @@ function replyButtonTemplate(replayToken) {
                 "defaultAction": {
                     "type": "uri",
                     "label": "View detail",
-                    "uri": "https://qiita.com"
+                    "uri": "__LIFF_URL__"
                 },
                 "actions": [
                     {
                       "type": "uri",
                       "label": "単語登録",
-                      "uri": "https://qiita.com"
+                      "uri": "__LIFF_URL__"
                     }
                 ]
             }
