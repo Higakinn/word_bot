@@ -55,18 +55,42 @@ function deleteTrigger() {
 //   }
 // }
 
-function doPost(e) {
-  var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
-  var lineType = JSON.parse(e.postData.contents).events[0].type
-  if (typeof replyToken === "undefined" || lineType === "follow") {
-    return;
-  }
-  var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
-  var cache = CacheService.getScriptCache();
-  var type = cache.get("type");
-  reply(replyToken, "hoge");   
+function logging(str) {
+    var sheet = SpreadsheetApp.openById("__DUBUG_SHEET_ID__").getActiveSheet();
+    var ts = new Date().toLocaleString("japanese", {timeZone: "Asia/Osaka"});
+    sheet.appendRow([ts, str]);
 }
 
+function doPost(e) {
+    try {
+        handleMessage(e);
+      } catch(error) {
+        logging("Word bot");
+        logging(JSON.stringify(e));
+        logging(JSON.stringify(error));
+    }    
+    var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
+    reply(replyToken, error.message)
+//   var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
+//   var lineType = JSON.parse(e.postData.contents).events[0].type
+//   if (typeof replyToken === "undefined" || lineType === "follow") {
+//     return;
+//   }
+//   var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
+//   var cache = CacheService.getScriptCache();
+//   var type = cache.get("type");
+//   reply(replyToken, "hoge");   
+}
+function handleMessage(e) {
+    var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
+    var lineType = JSON.parse(e.postData.contents).events[0].type
+    if (typeof replyToken === "undefined" || lineType === "follow") {
+        return;
+    }
+    var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
+    var cache = CacheService.getScriptCache();
+    reply(replyToken, "hoge");
+}
 // function setTrigger(year, mounth, day, time,content) {
 //   var onChangeTrigger = ScriptApp.newTrigger("createMessage")
 //   .timeBased()

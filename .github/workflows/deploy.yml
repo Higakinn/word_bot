@@ -8,6 +8,7 @@ env:
   CLASP_JSON: ${{ secrets.CLASP_JSON }}
   # BOT_ENV: ${{ secrets.BOT_ENV }}
   LINE_ACCESS_TOKEN: ${{ secrets.LINE_ACCESS_TOKEN }}
+  DUBUG_SHEET_ID: ${{ secrets.DUBUG_SHEET_ID }}
   USER_ID: ${{ secrets.USER_ID }}
   # SHEET_ID: ${{ secrets.SHEET_ID }}
   # LIFF_URL: ${{ secrets.LIFF_URL }}
@@ -25,7 +26,7 @@ jobs:
             mv word/word/test.js word/word/backup &&
             sed -e "s|__ACCESS_TOKEN__|${LINE_ACCESS_TOKEN}|g"
                 -e "s|__USER_ID__|${USER_ID}|g"
-                -e "s|__SHEET_ID__|${SHEET_ID}|g"
+                -e "s|__DUBUG_SHEET_ID__|${DUBUG_SHEET_ID}|g"
                 -e "s|__LIFF_URL__|${LIFF_URL}|g" word/word/backup  > word/word/test.js &&
             echo -n "${CLASPRC_JSON}" | base64 -d > word/.clasprc.json &&
             echo -n "${CLASP_JSON}" | base64 -d > word/word/.clasp.json &&
