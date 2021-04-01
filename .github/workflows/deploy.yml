@@ -1,4 +1,4 @@
-name: deploy word GAS
+name: deploy word bot GAS
 
 on: push
   
@@ -26,7 +26,7 @@ jobs:
             mv word/word/test.js word/word/backup &&
             sed -e "s|__ACCESS_TOKEN__|${LINE_ACCESS_TOKEN}|g"
                 -e "s|__USER_ID__|${USER_ID}|g"
-                -e "s|__DUBUG_SHEET_ID__|${DUBUG_SHEET_ID}|g"
+                -e "s|__DUBUG_SHEET_ID__|${DUBUG_SHEET_IDQ}|g"
                 -e "s|__LIFF_URL__|${LIFF_URL}|g" word/word/backup  > word/word/test.js &&
             echo -n "${CLASPRC_JSON}" | base64 -d > word/.clasprc.json &&
             echo -n "${CLASP_JSON}" | base64 -d > word/word/.clasp.json &&
