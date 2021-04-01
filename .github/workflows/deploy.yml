@@ -31,4 +31,4 @@ jobs:
             echo -n "${CLASPRC_JSON}" | base64 -d > word/.clasprc.json &&
             echo -n "${CLASP_JSON}" | base64 -d > word/word/.clasp.json &&
             docker-compose up -d &&
-            docker-compose exec -T word clasp push
+            docker-compose exec -T word clasp push -f
