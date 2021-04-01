@@ -108,7 +108,6 @@ function createMessages() {
   
 //実際にメッセージを送信する関数を作成します。
 function pushM(text) {
-  console.log("gg")
     //メッセージを送信(push)する時に必要なurlでこれは、皆同じなので、修正する必要ありません。
     //この関数は全て基本コピペで大丈夫です。
       var url = "https://api.line.me/v2/bot/message/push";
@@ -173,7 +172,6 @@ function pushM(text) {
     }
 
 function reply(replyToken, message) {
-    conosle.log(message)
     var url = "https://api.line.me/v2/bot/message/reply";
     UrlFetchApp.fetch(url, {
       "headers": {
@@ -199,32 +197,34 @@ function replyButtonTemplate(replayToken) {
   var buttonMessage = [{
           "type": "text",
           "text": "message",
-        }]
-    // {
-    //       "type": "template",
-    //       "altText": "覚えたい単語を登録する\n__LIFF_URL__",
-    //       "template": {
-    //           "type": "buttons",
-    //           "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
-    //           "imageAspectRatio": "rectangle",
-    //           "imageSize": "cover",
-    //           "imageBackgroundColor": "#FFFFFF",
-    //           "title": "登録",
-    //           "text": "覚えたい単語を登録する",
-    //           "defaultAction": {
-    //               "type": "uri",
-    //               "label": "View detail",
-    //               "uri": "__LIFF_URL__"
-    //           },
-    //           "actions": [
-    //               {
-    //                 "type": "uri",
-    //                 "label": "単語登録",
-    //                 "uri": "__LIFF_URL__"
-    //               }
-    //           ]
-    //       }
-    //   }
+        },
+        {
+            "type": "template",
+            "altText": "覚えたい単語を登録する\n__LIFF_URL__",
+            "template": {
+                "type": "buttons",
+                "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
+                "imageAspectRatio": "rectangle",
+                "imageSize": "cover",
+                "imageBackgroundColor": "#FFFFFF",
+                "title": "登録",
+                "text": "覚えたい単語を登録する",
+                "defaultAction": {
+                    "type": "uri",
+                    "label": "View detail",
+                    "uri": "https://qiita.com"
+                },
+                "actions": [
+                    {
+                      "type": "uri",
+                      "label": "単語登録",
+                      "uri": "https://qiita.com"
+                    }
+                ]
+            }
+        }
+    ]
+    
   // ]
   reply(replayToken,buttonMessage)
 }
