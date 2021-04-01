@@ -68,9 +68,9 @@ function doPost(e) {
         logging("Word bot");
         logging(JSON.stringify(e));
         logging(JSON.stringify(error));
+        var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
+        reply(replyToken, error.message)
     }    
-    var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
-    reply(replyToken, error.message)
 //   var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
 //   var lineType = JSON.parse(e.postData.contents).events[0].type
 //   if (typeof replyToken === "undefined" || lineType === "follow") {
