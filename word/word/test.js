@@ -175,6 +175,21 @@ function pushM(text) {
 function reply(replyToken, message) {
     var url = "https://api.line.me/v2/bot/message/reply";
     UrlFetchApp.fetch(url, {
+        "headers": {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Authorization": "Bearer " + ACCESS_TOKEN,
+        },
+        "method": "post",
+        "payload": JSON.stringify({
+        "replyToken": replyToken,
+        "messages": message
+        }),
+    });
+    return ContentService.createTextOutput(JSON.stringify({"content": "post ok"})).setMimeType(ContentService.MimeType.JSON);
+}
+function replyMessage(replyToken, message) {
+    var url = "https://api.line.me/v2/bot/message/reply";
+    UrlFetchApp.fetch(url, {
       "headers": {
         "Content-Type": "application/json; charset=UTF-8",
         "Authorization": "Bearer " + ACCESS_TOKEN,
