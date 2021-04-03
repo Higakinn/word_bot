@@ -7,53 +7,6 @@ function deleteTrigger() {
       ScriptApp.deleteTrigger(allTriggers[i]);
   }
 }
-// function setWordTrigger(timestamp,status,word){
-//   console.log(status)
-//   // 現在の日付を取得
-//   const next = new Date();
-
-//   const year = timestamp.getFullYear()
-//   const day = timestamp.getDate()
-//   // 翌日の日付に変換
-//   next.setFullYear(year)
-//   next.setMonth(timestamp.getMonth() + 1);
-//   next.setDate(day)
-
-//   // 09:30:00に時刻を設定
-//   next.setHours(timestamp.getHours + 1);
-//   next.setMinutes(timestamp.getMinutes);
-//   next.setMinutes(timestamp.getSeconds);
-//   next.setSeconds(0);
-//   switch(status) {
-//     case 1: 
-//      // 一時間後にトリガーを設定
-//      //スプレッドシートを更新
-//      console.log("一時間後にトリガーを設定")
-//      setTrigger(year,mounth, day, 3600 * 10, word)
-//      break;
-//     case 2: 
-//      // 一日後にトリガーを設定
-//      console.log("一日後にトリガーを設定")
-//      setTrigger(year,mounth, day, 86400 + 7200,word)
-//      break;
-//     case 3: 
-//      // 一週間後にトリガーを設定
-//      console.log("一週間後にトリガーを設定")
-
-//      setTrigger(year,mounth, day, 604800 + 7200,word)
-//      break;
-//     case 4: 
-//      // 一ヶ月後にトリガーを設定
-//      console.log("一ヶ月後にトリガーを設定")
-
-//      setTrigger(year,mounth, day, 2592000 + 7200,word)
-//      break;
-//     default :
-//      console.log("error")
-    
-//      break
-//   }
-// }
 
 function logging(str) {
     var sheet = SpreadsheetApp.openById("__DUBUG_SHEET_ID__").getActiveSheet();
@@ -71,41 +24,34 @@ function doPost(e) {
         var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
         reply(replyToken, error.message)
     }    
-//   var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
-//   var lineType = JSON.parse(e.postData.contents).events[0].type
-//   if (typeof replyToken === "undefined" || lineType === "follow") {
-//     return;
-//   }
-//   var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
-//   var cache = CacheService.getScriptCache();
-//   var type = cache.get("type");
-//   reply(replyToken, "hoge");   
 }
+
 function handleMessage(e) {
     var replyToken = JSON.parse(e.postData.contents).events[0].replyToken;
     var lineType = JSON.parse(e.postData.contents).events[0].type
     if (typeof replyToken === "undefined" || lineType === "follow") {
         return;
     }
-    var userMessage = JSON.parse(e.postData.contents).events[0].message.text;
-    var cache = CacheService.getScriptCache();
-    // reply(replyToken, "hoge");
     replyButtonTemplate(replyToken)
 }
-// function setTrigger(year, mounth, day, time,content) {
-//   var onChangeTrigger = ScriptApp.newTrigger("createMessage")
-//   .timeBased()
-//   .atDate(year, mounth, day)
-//   .after(time * 1000)
-//   .at(content)
-//   .create();
-// }
-function createMessages() {
-    //メッセージを定義する
-    message = "今日のreflactionを行ってください。";
-    console.log("start")
-    return pushM(message);
+
+function notifyForForgettingCurve(){
+  var SHEET_ID = '__SHEET_ID__'
+  var spreadSheet = SpreadsheetApp.openById(SHEET_ID);
+  var sheet = spreadSheet.getSheets()[0];
+  var range = sheet.getDataRange();
+  var values = range.getValues();
+  for(v of values.slice(1)){
+    var timestamp = v[0]
+    var timeLag = (new Date() - timestamp)/ 86400000
+    console.log(timeLag)
+    // 一時間後、一日後、一週間後、一ヶ月後
+    if (0.0416 <= timeLag && timeLag <= 0.125 || 1 <= timeLag && timeLag < 2 || 7 <= timeLag && timeLag < 8 || 30 <= timeLag && timeLag < 31) {
+      console.log(v[1])
+      pushM(v[1]);
+    }
   }
+}
   
 //実際にメッセージを送信する関数を作成します。
 function pushM(text) {
@@ -118,45 +64,13 @@ function pushM(text) {
       };
       var pushMessages = [
         {
-          "type": "template",
-          "altText": "今日のリフレクションを行ってください。\n__LIFF_URL__",
-          "template": {
-              "type": "buttons",
-              "thumbnailImageUrl": "https://example.com/bot/images/image.jpg",
-              "imageAspectRatio": "rectangle",
-              "imageSize": "cover",
-              "imageBackgroundColor": "#FFFFFF",
-              "title": "リフレクション",
-              "text": "今日一日のリフレクションを行ってください。",
-              "defaultAction": {
-                  "type": "uri",
-                  "label": "View detail",
-                  "uri": "https://example.com"
-              },
-              "actions": [
-                  {
-                    "type": "uri",
-                    "label": "リフレクション開始",
-                    "uri": "__LIFF_URL__"
-                  }
-              ]
-          }
+          'type':'text',
+          'text':"復習のタイミングです。\n 単語の復習を行ってください。",
         },
         {
           'type':'text',
-          'text':"__LIFF_URL__",
+          'text': text,
         }]
-      //toのところにメッセージを送信したいユーザーのIDを指定します。(toは最初の方で自分のIDを指定したので、linebotから自分に送信されることになります。)
-      //textの部分は、送信されるメッセージが入ります。createMessageという関数で定義したメッセージがここに入ります。
-      // var postData = {
-      //   "to" : USER_ID,
-      //   "messages" : [
-      //     {
-      //       'type':'text',
-      //       'text':text,
-      //     }
-      //   ]
-      // };
       
       var postData = {
         "to" : USER_ID,
